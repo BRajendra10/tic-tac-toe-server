@@ -62,12 +62,10 @@ function resetGame(clientId, rooms, ws) {
     const room = rooms.get(ws.roomId);
     if (!room) return;
     // Reset state
+    const players = room.state.players;
     room.state = createEmptyState();
-    // Get players array [p1, p2]
-    const [p1, p2] = Array.from(room.players.keys());
-    // Swap symbols
-    [room.state.players[p1], room.state.players[p2]] = ['O', 'X'];
-    // Broadcast
+    room.state.players = players; // Keep player symbols
+    // Broadcast updated state
     broadcastRoom(ws.roomId, { type: 'state', state: room.state }, ws);
 }
 
